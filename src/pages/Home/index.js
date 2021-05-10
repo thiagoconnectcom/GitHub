@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {Button, Row, Col, Alert} from 'react-bootstrap'
 import {Search} from "./styles"
 
@@ -12,17 +12,19 @@ import api from "../../services/api"
 
 export default function Home() {
 const [loading, setLoading] = useState(false)
-const [usuario, setUsuario] = useState("");
 const [error, setError] = useState("")
 const [profile, setProfile] = useState({});
 const [repos, setRepos] = useState([]);
 
+const inputEl = useRef({ usuario: null });
 
 const handleSearch = async () => {
+  const {usuario} = inputEl.current
+
   setLoading(true);
   try{
-    const requestUser = await api.get(`/${usuario}`);
-    const requestRepos = await api.get(`/${usuario}/repos`)
+    const requestUser = await api.get(`/${usuario.value}`);
+    const requestRepos = await api.get(`/${usuario.value}/repos`)
 
     setProfile(requestUser.data)
     setRepos(requestRepos.data)
@@ -42,8 +44,8 @@ const handleSearch = async () => {
         <div className="text-center mb-5">
           <Title titulo={"Pesquise um Usuário do GitHub"} />
           <Search 
-            type="text" 
-            onChange={(e) => setUsuario(e.target.value)} 
+            ref={el => inputEl.current.usuario = el}
+            // onChange={(e) => setUsuario(e.target.value)} 
             placeholder="Digite um usuário"  
           />
           {loading ?
@@ -60,7 +62,7 @@ const handleSearch = async () => {
                   <Profile user={profile} />
               </Col>
               <Col md={8}>
-                  <Repo usuario={usuario} repo={repos} />
+                  <Repo usuario={inputEl.current.usuario.value} repo={repos} />
               </Col>
             </Row>
           ) 
