@@ -45,7 +45,6 @@ const handleSearch = async () => {
           <Title titulo={"Pesquise um Usuário do GitHub"} />
           <Search 
             ref={el => inputEl.current.usuario = el}
-            // onChange={(e) => setUsuario(e.target.value)} 
             placeholder="Digite um usuário"  
           />
           {loading ?
