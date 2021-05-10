@@ -62,7 +62,12 @@ const handleSearch = async () => {
                   <Profile user={profile} />
               </Col>
               <Col md={8}>
-                  <Repo usuario={inputEl.current.usuario.value} repo={repos} />
+                 {repos.length > 0 ?
+                    <Repo usuario={inputEl.current.usuario.value} repo={repos} /> :
+                    <div className="text-center">
+                      <span>Esse Usuário não possui Repositórios no momento !</span>
+                    </div>
+                 }
               </Col>
             </Row>
           ) 
